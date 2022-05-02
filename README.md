@@ -8,8 +8,8 @@ Android 12 removed quick settings toggle for NFC so this app adds a nfc toggle i
 After installing the app there is nothing you can open/launch all you need to do is add the quick settings tile by clicking the pencil edit and dragging the new tile.
 
 # Screenshots
-![screenshot 1](https://github.com/ArtiomSu/Bring-Back-NFC-Quick-Settings-For-Android/blob/master/.screenshots/1.png)
-![screenshot 2](https://github.com/ArtiomSu/Bring-Back-NFC-Quick-Settings-For-Android/blob/master/.screenshots/2.png)
-![screenshot 2](https://github.com/ArtiomSu/Bring-Back-NFC-Quick-Settings-For-Android/blob/master/.screenshots/3.png)
-![screenshot 4](https://github.com/ArtiomSu/Bring-Back-NFC-Quick-Settings-For-Android/blob/master/.screenshots/4.png)
-![screenshot 5](https://github.com/ArtiomSu/Bring-Back-NFC-Quick-Settings-For-Android/blob/master/.screenshots/5.png)
+![screenshot 1](https://github.com/ArtiomSu/Bring-Back-NFC-Quick-Settings-For-Android/blob/main/.screenshots/1.png)
+![screenshot 2](https://github.com/ArtiomSu/Bring-Back-NFC-Quick-Settings-For-Android/blob/main/.screenshots/2.png)
+![screenshot 2](https://github.com/ArtiomSu/Bring-Back-NFC-Quick-Settings-For-Android/blob/main/.screenshots/3.png)
+![screenshot 4](https://github.com/ArtiomSu/Bring-Back-NFC-Quick-Settings-For-Android/blob/main/.screenshots/4.png)
+![screenshot 5](https://github.com/ArtiomSu/Bring-Back-NFC-Quick-Settings-For-Android/blob/main/.screenshots/5.png)
