@@ -3,14 +3,16 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
+
+    namespace("terminal_heat_sink.bringbacknfcquicksettings")
 
     defaultConfig {
         applicationId "terminal_heat_sink.bringbacknfcquicksettings"
         minSdk 30
-        targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        targetSdk 33
+        versionCode 3
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

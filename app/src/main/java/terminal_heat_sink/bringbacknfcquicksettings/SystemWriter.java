@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class SystemWriter {
 
-    private static void write_to_sys(String command, Context context){
+    private static boolean write_to_sys(String command, Context context){
         Process p;
         try {
             // Preform su to get root privledges
@@ -30,6 +30,7 @@ public class SystemWriter {
                         Log.i("SystemWriter","failed to write");
                         Toast toast = Toast.makeText(context, "Could not write please allow AsusRogPhone2RGB root access in magisk", Toast.LENGTH_LONG);
                         toast.show();
+                        return false;
                     }
 
 
@@ -39,30 +40,34 @@ public class SystemWriter {
                     Log.i("SystemWriter","not rooted 1");
                     Toast toast = Toast.makeText(context, "root required please root your phone", Toast.LENGTH_SHORT);
                     toast.show();
+                    return false;
                 }
             } catch (InterruptedException e) {
                 Log.i("SystemWriter","not rooted 2");
                 Toast toast = Toast.makeText(context, "root required please root your phone", Toast.LENGTH_SHORT);
                 toast.show();
+                return false;
             }
         } catch (IOException e) {
             Log.i("SystemWriter","not rooted 3");
             Toast toast = Toast.makeText(context, "root required please root your phone", Toast.LENGTH_SHORT);
             toast.show();
+            return false;
         }
+        return  true;
     }
 
-    public static void turn_on(boolean on, Context context){
+    public static boolean turn_on(boolean on, Context context){
         if(on){
-            write_to_sys("svc nfc enable \n",context);
+            return write_to_sys("svc nfc enable \n",context);
         }else{
-            write_to_sys("svc nfc disable \n",context);
+            return write_to_sys("svc nfc disable \n",context);
         }
     }
 
 
-    public static void turn_off_magisk_notifications(Context context){
-        write_to_sys("magisk --sqlite \"UPDATE policies SET notification = 0 WHERE package_name LIKE 'terminal_heat_sink.bringbacknfcquicksettings'\" \n",context);
+    public static boolean turn_off_magisk_notifications(Context context){
+        return write_to_sys("magisk --sqlite \"UPDATE policies SET notification = 0 WHERE package_name LIKE 'terminal_heat_sink.bringbacknfcquicksettings'\" \n",context);
     }
 
 

@@ -6,9 +6,7 @@ import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
 public class NfcQuickTile extends TileService {
-
-    private String app_first_run = "terminal_heat_sink.bringbacknfcquicksettings.app_first_run_shared_prefs_key";
-
+    String app_rooted = "terminal_heat_sink.bringbacknfcquicksettings.app_rooted_shared_prefs_key";
     @Override
     public void onClick() {
         super.onClick();
@@ -16,30 +14,53 @@ public class NfcQuickTile extends TileService {
         Tile tile = getQsTile();
 
         android.nfc.NfcAdapter mNfcAdapter= android.nfc.NfcAdapter.getDefaultAdapter(getApplicationContext());
-        boolean enabled = mNfcAdapter.isEnabled();
 
-        if(enabled){
-            SystemWriter.turn_on(false,getApplicationContext());
-            tile.setState(Tile.STATE_INACTIVE);
-            tile.setLabel("NFC");
-            tile.setSubtitle("Off");
+        boolean rooted = false;
+        if(mNfcAdapter == null){
+            tile.setState(Tile.STATE_UNAVAILABLE);
+            tile.setLabel("NO NFC");
         }else{
-            SystemWriter.turn_on(true,getApplicationContext());
-            tile.setState(Tile.STATE_ACTIVE);
-            tile.setLabel("NFC");
-            tile.setSubtitle("On");
+            if(mNfcAdapter.isEnabled()){
+                boolean success = SystemWriter.turn_on(false,getApplicationContext());
+                if(!success){
+                    tile.setState(Tile.STATE_INACTIVE);
+                    tile.setLabel("NOT ROOTED!");
+                }else {
+                    rooted = true;
+                    tile.setState(Tile.STATE_INACTIVE);
+                    tile.setLabel("NFC");
+                    tile.setSubtitle("Off");
+                }
+            }else{
+                boolean success = SystemWriter.turn_on(true,getApplicationContext());
+                if(!success){
+                    tile.setState(Tile.STATE_INACTIVE);
+                    tile.setLabel("NOT ROOTED!");
+                }else {
+                    rooted = true;
+                    tile.setState(Tile.STATE_ACTIVE);
+                    tile.setLabel("NFC");
+                    tile.setSubtitle("On");
+                }
+            }
         }
-        tile.updateTile();
+
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                 "terminal_heat_sink.bringbacknfcquicksettings", Context.MODE_PRIVATE);
 
+        String app_first_run = "terminal_heat_sink.bringbacknfcquicksettings.app_first_run_shared_prefs_key";
         boolean launched_first_time = prefs.getBoolean(app_first_run,false);
+        prefs.edit().putBoolean(app_rooted, rooted).apply();
         if(!launched_first_time){
             prefs.edit().putBoolean(app_first_run, true).apply();
-            SystemWriter.turn_off_magisk_notifications(getApplicationContext());
+            boolean success = SystemWriter.turn_off_magisk_notifications(getApplicationContext());
+            if(!success){
+                tile.setState(Tile.STATE_INACTIVE);
+                tile.setLabel("NOT ROOTED!");
+            }
         }
-
+        tile.updateTile();
     }
 
     @Override
@@ -62,17 +83,27 @@ public class NfcQuickTile extends TileService {
 
     private void update_tile(){
         android.nfc.NfcAdapter mNfcAdapter= android.nfc.NfcAdapter.getDefaultAdapter(getApplicationContext());
-        boolean enabled = mNfcAdapter.isEnabled();
         Tile tile = getQsTile();
-
-        if(enabled){
-            tile.setState(Tile.STATE_ACTIVE);
-            tile.setLabel("NFC");
-            tile.setSubtitle("On");
-        }else{
-            tile.setState(Tile.STATE_INACTIVE);
-            tile.setLabel("NFC");
-            tile.setSubtitle("Off");
+        if(mNfcAdapter == null){
+            tile.setState(Tile.STATE_UNAVAILABLE);
+            tile.setLabel("NO NFC");
+        }else {
+            SharedPreferences prefs = getApplicationContext().getSharedPreferences(
+                    "terminal_heat_sink.bringbacknfcquicksettings", Context.MODE_PRIVATE);
+            if (mNfcAdapter.isEnabled()) {
+                tile.setState(Tile.STATE_ACTIVE);
+                tile.setLabel("NFC");
+                tile.setSubtitle("On");
+            } else {
+                tile.setState(Tile.STATE_INACTIVE);
+                tile.setLabel("NFC");
+                tile.setSubtitle("Off");
+            }
+            boolean rooted = prefs.getBoolean(app_rooted, false);
+            if(!rooted){
+                tile.setState(Tile.STATE_INACTIVE);
+                tile.setLabel("NOT ROOTED!");
+            }
         }
         tile.updateTile();
     }
